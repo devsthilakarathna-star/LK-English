@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LK English - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --container-bg: #ffffff;
+            --text-color: #121212;
+            --sub-text-color: #555;
+            --primary-color: #1a73e8; /* Google Blue */
+            --primary-hover: #1765cc;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --sub-text-color: #a0a0a0;
+            --primary-color: #8ab4f8; /* Google Blue (Dark) */
+            --primary-hover: #a3c5f9;
+            --border-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            padding: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 18px;
+            color: var(--sub-text-color);
+            margin-bottom: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .button-group a {
+            text-decoration: none;
+            display: block;
+        }
+
+        .button-group button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: var(--container-bg);
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .button-group button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        nav a {
+            color: var(--sub-text-color);
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 15px;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-nav {
+            margin-top: 20px;
+        }
+
+        .theme-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            color: var(--text-color);
+        }
+
+        /* Iframe specific styles */
+        .form-container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            transition: background-color 0.3s;
+        }
+        
+        .form-container h2 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .form-container p {
+            color: var(--sub-text-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Ensures a 1:1 aspect ratio, adjust as needed */
+        }
+        
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: var(--container-bg);
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .modal-content p, .modal-content ul {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        .modal-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .modal-content ul li {
+            margin-bottom: 10px;
+        }
+        .close {
+            color: var(--sub-text-color);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close:hover,
+        .close:focus {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeSwitcher" class="theme-switcher">🌙</button>
+
+    <div class="main-container">
+        <header>
+            <h1>LK English</h1>
+            <p>Welcome to Sri Lanka's leading language tool. Choose a function below to get started.</p>
+        </header>
+
+        <div class="button-group">
+            <a href="Dictionary.html">
+                <button>Dictionary</button>
+            </a>
+            <a href="Translator.html">
+                <button>Translator</button>
+            </a>
+        </div>
+
+        <nav class="footer-nav">
+            <a href="#" id="aboutLink">About</a>
+            <a href="#" id="contactLink">Contact Us</a>
+        </nav>
+    </div>
+    
+    <div class="form-container">
+        <h2>We Value Your Feedback</h2>
+        <p>Please share your thoughts with us to help improve this service.</p>
+        <div class="form-wrapper">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScSYxbPJs1Gn_jUHZqFWtZLAqBtYfeI0M6CPXugBfm3fFEsDw/viewform?embedded=true">Loading…</iframe>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeAbout">&times;</span>
+            <h2>About LK English</h2>
+            <p>
+                LK English is a versatile language tool designed for the Sri Lankan community. Our goal is to make it easy to translate text and find definitions in Sinhala, Tamil, and English. We believe that technology can help bridge language barriers and connect people.
+            </p>
+            <p>
+                This project was created and developed by Shehan Thilakarathna, a passionate front-end developer dedicated to building practical and user-friendly web applications.
+            </p>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeContact">&times;</span>
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback? Feel free to reach out to me, Shehan Thilakarathna, using the details below:</p>
+            <ul>
+                <li>WhatsApp:<a href="https://wa.me/94779012471">+94 77 901 2471</a></li>
+                <li>Email:<a href="mailto:dev.shehan@gmail.com">dev.sthilakarathna@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const themeSwitcher = document.getElementById("themeSwitcher");
+        const body = document.body;
+        
+        // Modal elements
+        const aboutModal = document.getElementById("aboutModal");
+        const contactModal = document.getElementById("contactModal");
+        const aboutLink = document.getElementById("aboutLink");
+        const contactLink = document.getElementById("contactLink");
+        const closeAbout = document.getElementById("closeAbout");
+        const closeContact = document.getElementById("closeContact");
+
+        // --- Theme Switcher Logic ---
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                themeSwitcher.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                themeSwitcher.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        themeSwitcher.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            setTheme(isDarkMode ? 'light' : 'dark');
+        });
+
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+        // --- Modal Logic ---
+        aboutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            aboutModal.style.display = "block";
+        });
+
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            contactModal.style.display = "block";
+        });
+
+        closeAbout.addEventListener('click', () => {
+            aboutModal.style.display = "none";
+        });
+
+        closeContact.addEventListener('click', () => {
+            contactModal.style.display = "none";
+        });
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', (e) => {
+            if (e.target === aboutModal) {
+                aboutModal.style.display = "none";
+            }
+            if (e.target === contactModal) {
+                contactModal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
