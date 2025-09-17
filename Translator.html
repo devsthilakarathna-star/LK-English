@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LK Translator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Light Mode Variables */
+      --bg-color: #f4f6f8;
+      --container-bg: #ffffff;
+      --text-color: #121212;
+      --sub-text-color: #555;
+      --primary-color: #1a73e8; /* Google Blue */
+      --primary-hover: #1765cc;
+      --border-color: #e0e0e0;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+      --input-bg: #f9f9f9;
+    }
+
+    body.dark-mode {
+      /* Dark Mode Variables */
+      --bg-color: #121212;
+      --container-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --sub-text-color: #a0a0a0;
+      --primary-color: #8ab4f8; /* Google Blue (Dark) */
+      --primary-hover: #a3c5f9;
+      --border-color: #333;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --input-bg: #2a2a2a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      padding: 15px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .theme-switcher {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+    }
+
+    .container {
+      background-color: var(--container-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      padding: 20px;
+      transition: background-color 0.3s;
+    }
+    
+    .language-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .language-selector select {
+        width: 40%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        font-size: 16px;
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+    }
+    
+    .dark-mode .language-selector select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cccccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    }
+
+    #swapBtn {
+        background: none;
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--sub-text-color);
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+    #swapBtn:hover {
+        transform: rotate(180deg);
+        background-color: var(--input-bg);
+    }
+
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 18px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        resize: vertical;
+        margin-bottom: 15px;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+    }
+    .dark-mode textarea:focus {
+        box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.2);
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .controls button {
+        flex-grow: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    #translateBtn {
+        background-color: var(--primary-color);
+        color: var(--bg-color);
+    }
+    .dark-mode #translateBtn {
+        color: #121212;
+    }
+
+    #translateBtn:hover {
+        background-color: var(--primary-hover);
+    }
+    
+    #clearBtn {
+        background-color: var(--input-bg);
+        color: var(--sub-text-color);
+        border: 1px solid var(--border-color);
+    }
+    
+    #result-container {
+        border: 1px dashed var(--border-color);
+        border-radius: 8px;
+        padding: 15px;
+        min-height: 150px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        font-size: 18px;
+        line-height: 1.6;
+        position: relative;
+    }
+    
+    #copyBtn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--container-bg);
+        border: 1px solid var(--border-color);
+        color: var(--sub-text-color);
+        padding: 5px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: none; /* Hidden by default */
+    }
+
+    .placeholder {
+        color: var(--sub-text-color);
+        text-align: center;
+        padding-top: 50px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌐 LK Translator</h1>
+    <button id="themeSwitcher" class="theme-switcher">🌙</button>
+  </header>
+
+  <div class="container">
+    <div class="language-selector">
+      <select id="sourceLang">
+        <option value="en">English</option>
+        <option value="si">Sinhala</option>
+        <option value="ta">Tamil</option>
+      </select>
+      <button id="swapBtn" title="Swap languages">&#8646;</button>
+      <select id="targetLang">
+        <option value="si">Sinhala</option>
+        <option value="en">English</option>
+        <option value="ta">Tamil</option>
+      </select>
+    </div>
+
+    <textarea id="sourceText" placeholder="Enter text here..."></textarea>
+
+    <div class="controls">
+      <button id="translateBtn">Translate</button>
+      <button id="clearBtn">Clear</button>
+    </div>
+
+    <div id="result-container">
+      <div id="resultText" class="placeholder">Translation will appear here</div>
+      <button id="copyBtn">Copy</button>
+    </div>
+  </div>
+
+  <script>
+    // --- DOM Elements ---
+    const sourceLang = document.getElementById('sourceLang');
+    const targetLang = document.getElementById('targetLang');
+    const swapBtn = document.getElementById('swapBtn');
+    const sourceText = document.getElementById('sourceText');
+    const translateBtn = document.getElementById('translateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultText = document.getElementById('resultText');
+    const copyBtn = document.getElementById('copyBtn');
+    const themeSwitcher = document.getElementById("themeSwitcher");
+
+    // --- Theme Switcher Logic ---
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeSwitcher.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark-mode');
+        themeSwitcher.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    themeSwitcher.addEventListener('click', () => {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      setTheme(isDarkMode ? 'light' : 'dark');
+    });
+
+    // Set initial theme
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    // --- Translation Logic ---
+    async function translateText() {
+      const text = sourceText.value.trim();
+      const sl = sourceLang.value;
+      const tl = targetLang.value;
+
+      if (text === '') {
+        resultText.textContent = 'Please enter text to translate.';
+        resultText.classList.add('placeholder');
+        copyBtn.style.display = 'none';
+        return;
+      }
+      
+      if (sl === tl) {
+        resultText.textContent = 'Source and target languages are the same.';
+        resultText.classList.remove('placeholder');
+        copyBtn.style.display = 'none';
+        return;
+      }
+
+      resultText.textContent = 'Translating...';
+      resultText.classList.add('placeholder');
+      copyBtn.style.display = 'none';
+
+      try {
+        const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        const translatedText = data[0].map(item => item[0]).join('');
+        
+        resultText.textContent = translatedText;
+        resultText.classList.remove('placeholder');
+        copyBtn.style.display = 'block';
+
+      } catch (error) {
+        resultText.textContent = 'Translation failed. Please try again.';
+        resultText.classList.add('placeholder');
+        copyBtn.style.display = 'none';
+        console.error('Translation Error:', error);
+      }
+    }
+    
+    // --- Event Listeners ---
+    translateBtn.addEventListener('click', translateText);
+    
+    clearBtn.addEventListener('click', () => {
+        sourceText.value = '';
+        resultText.innerHTML = '<div id="resultText" class="placeholder">Translation will appear here</div>';
+        copyBtn.style.display = 'none';
+        sourceText.focus();
+    });
+
+    swapBtn.addEventListener('click', () => {
+        const tempLang = sourceLang.value;
+        sourceLang.value = targetLang.value;
+        targetLang.value = tempLang;
+
+        // Also swap text if there is text in both areas
+        if (!resultText.classList.contains('placeholder') && sourceText.value) {
+            const tempText = sourceText.value;
+            sourceText.value = resultText.textContent;
+            resultText.textContent = tempText;
+        }
+    });
+
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(resultText.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy';
+            }, 2000);
+        });
+    });
+
+  </script>
+</body>
+  </html>
