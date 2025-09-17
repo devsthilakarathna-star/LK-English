@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LK English Dictionary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Light Mode Variables */
+      --bg-color: #f4f6f8;
+      --container-bg: #ffffff;
+      --text-color: #121212;
+      --sub-text-color: #555;
+      --primary-color: #0052cc;
+      --primary-hover: #003e99;
+      --border-color: #e0e0e0;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+      --definition-bg: #f9f9f9;
+      --definition-border: #0052cc;
+    }
+
+    body.dark-mode {
+      /* Dark Mode Variables */
+      --bg-color: #121212;
+      --container-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --sub-text-color: #a0a0a0;
+      --primary-color: #4dabf7;
+      --primary-hover: #74c0fc;
+      --border-color: #333;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --definition-bg: #2a2a2a;
+      --definition-border: #4dabf7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      padding: 15px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .theme-switcher {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+    }
+
+    .container {
+      background-color: var(--container-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      padding: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .search-box {
+      display: flex;
+      position: relative;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    #wordInput {
+      flex: 1;
+      padding: 14px 45px 14px 18px; /* Right padding for clear button */
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    #wordInput:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.2);
+    }
+    
+    .dark-mode #wordInput:focus {
+        box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+    }
+
+    #clearBtn {
+        position: absolute;
+        right: 95px; /* Adjust based on search button width */
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--sub-text-color);
+        cursor: pointer;
+        padding: 5px;
+        display: none; /* Hidden by default */
+    }
+
+    #searchBtn {
+      padding: 14px 22px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      margin-left: 10px;
+      transition: background-color 0.2s;
+    }
+
+    #searchBtn:hover {
+      background: var(--primary-hover);
+    }
+
+    .result {
+      margin-top: 10px;
+    }
+
+    .initial-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--sub-text-color);
+    }
+    
+    .initial-message h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .result h2 {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-color);
+      text-transform: capitalize;
+    }
+    
+    .result .phonetic {
+        color: var(--sub-text-color);
+        margin: 5px 0 20px 0;
+        font-size: 18px;
+    }
+    
+    .audio-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        vertical-align: middle;
+    }
+
+    .result h3 {
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--primary-color);
+      margin-top: 25px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+    }
+
+    .definition {
+      margin: 15px 0;
+      padding: 15px;
+      border-left: 4px solid var(--definition-border);
+      background: var(--definition-bg);
+      border-radius: 0 8px 8px 0;
+      line-height: 1.6;
+    }
+
+    .definition strong {
+      color: var(--text-color);
+    }
+    
+    .definition em {
+        display: block;
+        color: var(--sub-text-color);
+        margin-top: 8px;
+        padding-left: 10px;
+        border-left: 2px solid var(--border-color);
+    }
+
+    .error, .loading {
+        text-align: center;
+        padding: 40px 20px;
+        font-size: 18px;
+        color: var(--sub-text-color);
+    }
+    
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📖 LK English Dictionary</h1>
+    <button id="themeSwitcher" class="theme-switcher">🌙</button>
+  </header>
+
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="wordInput" placeholder="Type a word...">
+      <button id="clearBtn" title="Clear search">&times;</button>
+      <button id="searchBtn">Search</button>
+    </div>
+    <div id="result" class="result">
+       <div class="initial-message">
+           <h2>Welcome!</h2>
+           <p>Type a word in the search bar and press 'Search' to begin.</p>
+       </div>
+    </div>
+  </div>
+
+  <script>
+    const wordInput = document.getElementById("wordInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const resultDiv = document.getElementById("result");
+    const themeSwitcher = document.getElementById("themeSwitcher");
+
+    // --- Theme Switcher Logic ---
+    function setTeam(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeSwitcher.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeSwitcher.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    themeSwitcher.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        setTeam(isDarkMode ? 'light' : 'dark');
+    });
+
+    // Set initial theme based on localStorage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTeam(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+
+    // --- Search Logic ---
+    function searchWord() {
+      let word = wordInput.value.trim();
+
+      if (word === "") {
+        resultDiv.innerHTML = `<div class="error"><p>Please enter a word to search.</p></div>`;
+        return;
+      }
+
+      resultDiv.innerHTML = `<div class="loading"><p>Searching for "${word}"...</p></div>`;
+
+      fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Word not found');
+            }
+            return res.json();
+        })
+        .then(data => {
+            displayResults(data, word);
+        })
+        .catch(() => {
+          resultDiv.innerHTML = `<div class="error">
+            <h2>Oops! 😥</h2>
+            <p>We couldn't find a definition for "${word}". Please check the spelling and try again.</p>
+          </div>`;
+        });
+    }
+
+    function displayResults(data, word) {
+        const entry = data[0];
+        const phoneticInfo = entry.phonetics.find(p => p.text && p.audio) || entry.phonetics.find(p => p.text) || {};
+        const phoneticText = phoneticInfo.text || "";
+        const audioUrl = phoneticInfo.audio || "";
+        const meanings = entry.meanings;
+
+        let html = `<h2>${entry.word}</h2>`;
+        
+        html += `<p class="phonetic">${phoneticText} 
+            ${audioUrl ? `<button class="audio-btn" onclick="playAudio('${audioUrl}')">🔊</button>` : ""}
+        </p>`;
+
+        meanings.forEach(m => {
+          html += `<h3>${m.partOfSpeech}</h3>`;
+          m.definitions.forEach((def, i) => {
+            html += `<div class="definition"><strong>${i+1}.</strong> ${def.definition}`;
+            if (def.example) {
+              html += `<br><em>Example: "${def.example}"</em>`;
+            }
+            html += `</div>`;
+          });
+        });
+
+        resultDiv.innerHTML = html;
+    }
+
+    function playAudio(url) {
+      new Audio(url).play();
+    }
+    
+    // --- Event Listeners ---
+    searchBtn.addEventListener('click', searchWord);
+    
+    wordInput.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+            searchWord();
+        }
+        
+        // Show or hide the clear button
+        if(wordInput.value.trim().length > 0) {
+            clearBtn.style.display = 'block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        wordInput.value = '';
+        clearBtn.style.display = 'none';
+        resultDiv.innerHTML = `<div class="initial-message">
+           <h2>Welcome!</h2>
+           <p>Type a word in the search bar and press 'Search' to begin.</p>
+       </div>`;
+        wordInput.focus();
+    });
+
+  </script>
+</body>
+</html>
