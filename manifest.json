@@ -1,0 +1,13 @@
+{
+  "background_color": "#280a61",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "LK English",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "lkenglish",
+  "start_url": "/",
+  "theme_color": "rgb(1, 169, 116)",
+  "id": "1111",
+  "description": "This is English language learning app"
+}
